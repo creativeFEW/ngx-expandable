@@ -1,0 +1,14 @@
+:host {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  display: inline-block;
+  will-change: height;;
+  &:after {
+    content: ' ';
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+  }
+}
