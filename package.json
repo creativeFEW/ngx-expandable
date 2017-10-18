@@ -4,7 +4,7 @@
   "keywords": ["angular", "expandable", "accordian"],
   "homepage": "https://github.com/creativeFEW/ngx-expandable",
   "bugs": "https://github.com/creativeFEW/ngx-expandable/issues",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Jason Chaney",
     "email": "jchaney@creativefew.com"
