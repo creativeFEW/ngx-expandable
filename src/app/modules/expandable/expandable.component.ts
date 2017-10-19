@@ -1,42 +1,46 @@
-import {Component, ElementRef, Input, OnChanges} from '@angular/core';
-import $ from 'jquery';
+import { Component, ElementRef, HostBinding, Input } from '@angular/core';
+import {animate, state, style, transition, trigger, keyframes} from '@angular/animations';
 
 @Component({
   selector: 'ngx-expandable',
   template: '<ng-content></ng-content>',
-  styleUrls: ['./expandable.component.scss']
+  styleUrls: ['./expandable.component.scss'],
+  animations: [
+    trigger('bodyExpansion', [
+      state('collapsed', style({
+        height: '0'
+      })),
+      state('expanded', style({
+        height: 'auto'
+      })),
+      transition('collapsed => expanded', animate('{{duration}}ms ease', keyframes([
+          style({offset: 0, opacity: 0, height: 0}),
+          style({offset: 1, opacity: 1, height: '{{expandedHeight}}'}),
+        ]))),
+      transition('expanded => collapsed', animate('{{duration}}ms ease', keyframes([
+          style({offset: 0, opacity: 1, height: '{{expandedHeight}}'}),
+          style({offset: 1, opacity: 0, height: 0}),
+        ])))
+    ])
+  ]
 })
-export class ExpandableComponent implements OnChanges {
+
+export class ExpandableComponent {
   @Input() expanded: boolean;
   @Input() duration = 250;
+  @HostBinding('@bodyExpansion') get bodyExpansion() {
+    return {
+      value: this.expanded ? 'expanded' : 'collapsed',
+      params: {
+        expandedHeight: `${this.getContentHeight()}px`,
+        duration: this.duration
+      }
+    };
+  }
 
   constructor(public el: ElementRef) {}
 
-  expand() {
-    $(this.el.nativeElement).stop().animate({
-      'height': this.getContentHeight(this.el.nativeElement),
-      'opacity': 1
-    }, this.duration, 'swing', () => {
-      $(this.el.nativeElement).css({'height': 'auto'});
-    });
-  }
-
-  contract() {
-    $(this.el.nativeElement).stop().animate({
-      'height': 0,
-      'opacity': 0
-    });
-  }
-
-  ngOnChanges(changes) {
-    if (changes.expanded.currentValue) {
-      this.expand();
-    } else {
-      this.contract();
-    }
-  }
-
-  getContentHeight(nativeEl) {
-    return nativeEl.scrollHeight;
+  getContentHeight() {
+    return this.el.nativeElement.scrollHeight;
   }
 }
