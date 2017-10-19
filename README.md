@@ -14,7 +14,7 @@ Additional benefits over NG Bootstrap:
 
 ## Installation
 
-`npm i ngx-expandable`
+`npm i @creativefew/ngx-expandable`
 
 Then add `NgxExpandableModule` to your `imports` array in your main app module.  Make sure to import it at the top of the file.
 
